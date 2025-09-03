@@ -760,9 +760,9 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                       .filter(conn => conn.status === 'open' && conn.heater === false)
                       .map(conn => (
                         <SelectItem 
-                          key={conn._id} 
-                          value={conn._id}
-                          checked={formData.connectionsSelect?.includes(conn._id)}
+                          key={conn.instanceName} 
+                          value={conn.instanceName}
+                          checked={formData.connectionsSelect?.includes(conn.instanceName)}
                         >
                           {conn.name || 'Conexão sem nome'}
                         </SelectItem>
@@ -775,9 +775,9 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                 {Array.isArray(formData.connectionsSelect) && formData.connectionsSelect.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-2">
                     {formData.connectionsSelect.map(connId => {
-                      const conn = connections.find(c => c._id === connId);
+                      const conn = connections.find(c => c.instanceName === connId);
                       return conn ? (
-                        <span key={conn._id} className="text-xs bg-gray-100 px-2 py-1 rounded">
+                        <span key={conn.instanceName} className="text-xs bg-gray-100 px-2 py-1 rounded">
                           {conn.name}
                         </span>
                       ) : null;
