@@ -194,15 +194,15 @@ export function AddHeater({ connections, onSuccess, heaterConnections, activeCon
               />
 
               <div className="space-y-1">
-                <FormLabel className="text-slate-700 dark:text-slate-300 text-sm">Conexões para Aquecimento</FormLabel>
+                <FormLabel className="text-slate-700 dark:text-slate-300 text-sm">Conexões de Aquecimento</FormLabel>
                 <div className="space-y-1">
                   <p className="text-sm text-slate-500 dark:text-slate-400 mb-1">
-                    Selecione as conexões que serão aquecidas
+                    Selecione as conexões que serão usadas para aquecer o número selecionado.
                   </p>
                   <div className="border dark:border-slate-700 rounded-md p-2 max-h-40 overflow-y-auto bg-slate-50 dark:bg-slate-800/50">
-                    {heaterConnections.length > 0 ? (
+                    {activeConnections.length > 0 ? (
                       <div className="grid gap-2">
-                        {heaterConnections.map((connection) => (
+                        {activeConnections.filter((connection) => connection.status === "open").map((connection) => (
                           <div 
                             key={connection._id} 
                             className={`flex items-center space-x-3 p-2 rounded-md transition-colors ${
@@ -242,7 +242,7 @@ export function AddHeater({ connections, onSuccess, heaterConnections, activeCon
               </div>
 
               <div className="space-y-1.5">
-                <FormLabel className="text-slate-700 dark:text-slate-300 text-sm">Conexão de Aquecimento</FormLabel>
+                <FormLabel className="text-slate-700 dark:text-slate-300 text-sm">Conexão para Aquecimento</FormLabel>
                 <FormField
                   control={form.control}
                   name="connectionHeater"
@@ -255,7 +255,7 @@ export function AddHeater({ connections, onSuccess, heaterConnections, activeCon
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className="max-h-60">
-                          {activeConnections.filter((connection) => connection.status === "open").map((connection) => (
+                          {heaterConnections.filter((connection) => connection.status === "open").map((connection) => (
                             <SelectItem 
                               key={connection.instanceName} 
                               value={connection.instanceName}

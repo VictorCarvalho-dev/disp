@@ -663,14 +663,14 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-medium">Nova Campanha</h1>
             <div className="flex items-center gap-2">
-              <Button
+              {/* <Button
                 type="button"
                 onClick={handleTest}
                 disabled={isLoading}
                 variant="outline"
               >
                 Testar
-              </Button>
+              </Button> */}
               <Button
                 type="button"
                 onClick={onCancel}
@@ -688,7 +688,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     Salvando...
                   </>
-                ) : 'Salvar e Agendar'}
+                ) : 'Iniciar'}
               </Button>
             </div>
           </div>
