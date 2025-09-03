@@ -28,8 +28,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { cancelHeater } from "@/app/_server-actions/heater";
+import { toast } from "sonner";
 
-export function HeaterTable({ heaters, onCancelHeater, isLoading = false }) {
+export function HeaterTable({ heaters, isLoading = false }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedHeater, setSelectedHeater] = useState(null);
   const [isCanceling, setIsCanceling] = useState(false);
@@ -62,7 +64,17 @@ export function HeaterTable({ heaters, onCancelHeater, isLoading = false }) {
     if (!selectedHeater) return;
     setIsCanceling(true);
     try {
-      await onCancelHeater(selectedHeater._id);
+      const result = await cancelHeater(selectedHeater._id);
+      if (result.success) {
+        toast.success("Aquecimento cancelado com sucesso!");
+        // Refresh the page to update the data
+        window.location.reload();
+      } else {
+        toast.error(result.error || "Erro ao cancelar aquecimento");
+      }
+    } catch (error) {
+      console.error("Erro ao cancelar aquecimento:", error);
+      toast.error("Erro ao cancelar aquecimento");
     } finally {
       setIsCanceling(false);
       setDeleteDialogOpen(false);

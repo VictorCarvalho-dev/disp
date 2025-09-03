@@ -3,10 +3,13 @@ import { getUsers } from "@/app/_server-actions/users";
 import { UsersTable } from "./_components/usersTable";
 import { NewUser } from "./_components/newUser";
 
+
 async function UsersContent() {
     const users = await getUsers();
     return <UsersTable users={users} isLoading={false} />;
 }
+
+export const dynamic = 'force-dynamic';
 
 export default function UsersPage() {
     return (

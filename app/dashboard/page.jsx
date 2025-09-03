@@ -2,6 +2,8 @@ import DashClient from "./_components/DashClient";
 import { getActiveConnections } from '@/app/_server-actions/dashboard';
 import { getConnections } from '@/app/_server-actions/connections';
 
+
+export const dynamic = 'force-dynamic';
 export default async function Dashboard() {
   const connections = await getActiveConnections();
   const totalConnections = await getConnections();

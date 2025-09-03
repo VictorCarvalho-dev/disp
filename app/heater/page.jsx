@@ -3,29 +3,17 @@ import { getHeaters } from "@/app/_server-actions/heater";
 import { getConnections } from "@/app/_server-actions/connections";
 import { HeaterTable } from "./_components/heaterTable";
 import { AddHeater } from "./_components/addHeater";
-import { cancelHeater } from "@/app/_server-actions/heater";
 import { getHeaterConnections } from "@/app/_server-actions/connections";
 import { getActiveConnections } from "@/app/_server-actions/connections";
 
-async function HeaterContent() {
-  const [heaters, connections] = await Promise.all([
-    getHeaters(),
-    getConnections()
-  ]);
+export const dynamic = 'force-dynamic';
 
-  const handleCancelHeater = async (heaterId) => {
-    'use server';
-    const result = await cancelHeater(heaterId);
-    if (result.success) {
-      return { success: true };
-    }
-    return { success: false, error: result.error };
-  };
+async function HeaterContent() {
+  const heaters = await getHeaters()
 
   return (
     <HeaterTable 
       heaters={heaters} 
-      onCancelHeater={handleCancelHeater}
       isLoading={false}
     />
   );
