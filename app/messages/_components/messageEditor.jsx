@@ -1081,13 +1081,13 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                       </div>
                       <p className="text-xs text-gray-600 mb-3">Quantidade de envios por bloco</p>
                       <div className="grid grid-cols-2 gap-3">
-                       <div>
+                        <div>
                           <Label className="text-xs text-gray-600 font-medium">De (Bloco)</Label>
                           <Input
                             type="number"
                             min="0"
-                            value={formData.config.delayFrom}
-                            onChange={e => setFormData({ ...formData, config: { ...formData.config, delayFrom: parseInt(e.target.value) || 0 } })}
+                            value={formData.config.blockFrom}
+                            onChange={e => setFormData({ ...formData, config: { ...formData.config, blockFrom: parseInt(e.target.value) || 0 } })}
                             className="mt-1 h-9"
                           />
                         </div>
@@ -1096,12 +1096,12 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                           <Input
                             type="number"
                             min="0"
-                            value={formData.config.delayTo}
-                            onChange={e => setFormData({ ...formData, config: { ...formData.config, delayTo: parseInt(e.target.value) || 0 } })}
+                            value={formData.config.blockTo}
+                            onChange={e => setFormData({ ...formData, config: { ...formData.config, blockTo: parseInt(e.target.value) || 0 } })}
                             className="mt-1 h-9"
                           />
                         </div>
-                        </div>
+                      </div>
                     </div>
                   )}
 
