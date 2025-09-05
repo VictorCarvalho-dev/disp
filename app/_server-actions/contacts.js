@@ -9,7 +9,7 @@ export async function getContacts() {
   try {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
-    const response = await Axios.get("https://pro.libanoinstituto.com.br/listContacts", {
+    const response = await Axios.get("https://prod.libanoinstituto.com.br/listContacts", {
       headers: {
         "Key": userCookie?.value,
       },
@@ -28,7 +28,7 @@ export async function getContactsByList(listId) {
     try {
       const cookieStore = await cookies();
       const userCookie = cookieStore.get("user");
-      const response = await Axios.get(`https://pro.libanoinstituto.com.br/contact/${listId}`, {
+      const response = await Axios.get(`https://prod.libanoinstituto.com.br/contact/${listId}`, {
         headers: {
           "Key": userCookie?.value,
         },
@@ -48,7 +48,7 @@ export async function createContactList(data, name) {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
     const response = await Axios.post(
-      `https://pro.libanoinstituto.com.br/uploadContacts/${name}`,
+      `https://prod.libanoinstituto.com.br/uploadContacts/${name}`,
       data,
       {
         headers: {
@@ -72,7 +72,7 @@ export async function deleteContactByIds(ids, listId) {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
     const response = await Axios.put(
-      `https://pro.libanoinstituto.com.br/deleteContactsByIds/${listId}`,
+      `https://prod.libanoinstituto.com.br/deleteContactsByIds/${listId}`,
       {
         idsDelete: ids,
       },
@@ -98,7 +98,7 @@ export async function deleteContactList(listId) {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
     const response = await Axios.delete(
-      `https://pro.libanoinstituto.com.br/deleteContact/${listId}`,
+      `https://prod.libanoinstituto.com.br/deleteContact/${listId}`,
       {
         headers: {
           "Key": userCookie?.value,

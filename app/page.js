@@ -27,7 +27,7 @@ export default function Home() {
     setIsLoading(true);
     setTimeout(() => {
       const { email, password } = values;
-      Axios.post("https://pro.libanoinstituto.com.br/login", { 
+      Axios.post("https://prod.libanoinstituto.com.br/login", { 
         login: email, pass: password 
       })
         .then((response) => {

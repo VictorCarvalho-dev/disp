@@ -9,7 +9,7 @@ export async function getHeaters() {
   try {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
-    const response = await Axios.get("https://pro.libanoinstituto.com.br/heaterList", {
+    const response = await Axios.get("https://prod.libanoinstituto.com.br/heaterList", {
       headers: {
         "Key": userCookie?.value,
       },
@@ -29,7 +29,7 @@ export async function createHeater(data) {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
     const response = await Axios.post(
-      "https://pro.libanoinstituto.com.br/heater",
+      "https://prod.libanoinstituto.com.br/heater",
       data,
       {
         headers: {
@@ -53,7 +53,7 @@ export async function cancelHeater(id) {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
     const response = await Axios.put(
-      `https://pro.libanoinstituto.com.br/heaterCanceled/${id}`,
+      `https://prod.libanoinstituto.com.br/heaterCanceled/${id}`,
       {},
       {
         headers: {
