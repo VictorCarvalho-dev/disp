@@ -8,7 +8,7 @@ export async function getActiveConnections() {
   try {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
-    const response = await Axios.get("https://pro.libanoinstituto.com.br//listConnections/active", {
+    const response = await Axios.get("https://pro.libanoinstituto.com.br/listConnections/active", {
       headers: {
         "Key": userCookie?.value,
       },
@@ -47,7 +47,7 @@ export async function postShots(start, end) {
       end: formatDate(end)
     };
 
-    const response = await Axios.post("https://pro.libanoinstituto.com.br//dashShots", requestBody, {
+    const response = await Axios.post("https://pro.libanoinstituto.com.br/dashShots", requestBody, {
       headers: {
         "Content-Type": "application/json",
         "Key": userCookie?.value,

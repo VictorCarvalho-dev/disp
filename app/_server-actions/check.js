@@ -11,7 +11,7 @@ export async function getChecks() {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
     
-    const response = await fetch("https://pro.libanoinstituto.com.br//listContactsCheck", {
+    const response = await fetch("https://pro.libanoinstituto.com.br/listContactsCheck", {
       headers: {
         "Key": userCookie?.value || "",
       },
@@ -37,7 +37,7 @@ export async function createCheck(data, name) {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
     const response = await Axios.post(
-      `https://pro.libanoinstituto.com.br//uploadContactsCheck/${name}`,
+      `https://pro.libanoinstituto.com.br/uploadContactsCheck/${name}`,
       data,
       {
         headers: {
@@ -61,7 +61,7 @@ export async function cancelCheck(checkId) {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
     const response = await Axios.post(
-      `https://pro.libanoinstituto.com.br//contactsCheck/${checkId}/canceled`,
+      `https://pro.libanoinstituto.com.br/contactsCheck/${checkId}/canceled`,
       {},
       {
         headers: {
@@ -85,7 +85,7 @@ export async function downloadCSV(checkId) {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
     const response = await Axios.get(
-      `https://pro.libanoinstituto.com.br//downloadCheckCSV/${checkId}`,
+      `https://pro.libanoinstituto.com.br/downloadCheckCSV/${checkId}`,
       {
         headers: {
           "Key": userCookie?.value,

@@ -9,7 +9,7 @@ export async function getUsers() {
     try {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const users = await Axios.get("https://pro.libanoinstituto.com.br//users", {
+        const users = await Axios.get("https://pro.libanoinstituto.com.br/users", {
             headers: {
                 "Key": userCookie?.value
             },
@@ -28,7 +28,7 @@ export async function createUser(values) {
     try {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const users = await Axios.post("https://pro.libanoinstituto.com.br//create-user", {
+        const users = await Axios.post("https://pro.libanoinstituto.com.br/create-user", {
             name: values.name,
             email: values.email,
             pass: values.password,
@@ -54,7 +54,7 @@ export async function deleteUser(id) {
     try {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const users = await Axios.delete(`https://pro.libanoinstituto.com.br//delete-user/${id}`, {
+        const users = await Axios.delete(`https://pro.libanoinstituto.com.br/delete-user/${id}`, {
             headers: {
                 "Key": userCookie?.value
             }
@@ -75,7 +75,7 @@ export async function updateUser(id, values) {
     try {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const users = await Axios.put(`https://pro.libanoinstituto.com.br//update-user/${id}`, {
+        const users = await Axios.put(`https://pro.libanoinstituto.com.br/update-user/${id}`, {
             name: values.name,
             email: values.email,
             pass: values.password,
