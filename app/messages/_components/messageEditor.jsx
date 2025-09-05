@@ -36,19 +36,19 @@ function randomPick(arr) {
 function parseTemplate(template, mediaFiles = {}) {
   console.log("[parseTemplate] Input template:", template);
   console.log("[parseTemplate] Media files:", mediaFiles);
-  
+
   let img = mediaFiles.images || [];
   let video = mediaFiles.videos || [];
   let audio = mediaFiles.audios || [];
   let doc = mediaFiles.documents || [];
-  
+
   console.log("[parseTemplate] Available media counts:", {
     images: img.length,
     videos: video.length,
     audios: audio.length,
     documents: doc.length
   });
-  
+
   let blocks = template.split("{{quebra}}");
   console.log("[parseTemplate] Blocks after split:", blocks);
   let result = [];
@@ -196,7 +196,7 @@ function WhatsAppPreviewModal({ open, onClose, stepContent = [], stepIndex = 0 }
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
       <DialogTitle>
-        
+
       </DialogTitle>
       <DialogContent className="p-0 bg-transparent border-none shadow-none w-auto max-w-none">
         <div className="relative w-[360px] h-[720px] bg-black rounded-[36px] shadow-2xl border-8 border-black overflow-hidden">
@@ -207,8 +207,8 @@ function WhatsAppPreviewModal({ open, onClose, stepContent = [], stepIndex = 0 }
               <div className="text-sm font-semibold">Prévia • Variação {stepIndex + 1}</div>
               <div className="text-[10px] text-white/80">WhatsApp</div>
             </div>
-            <button 
-              onClick={onClose} 
+            <button
+              onClick={onClose}
               className="text-white/90 hover:text-white text-sm"
             >
               Fechar
@@ -243,11 +243,14 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
   const [variables, setVariables] = useState([]);
   const [formData, setFormData] = useState(() => ({
     contactListId: "",
-    connectionsSelect: [], 
+    connectionsSelect: [],
     config: {
       delayFrom: 1,
       delayTo: 5,
-      delayBlock: 15,
+
+      blockFrom: 15,
+      blockTo: 15,
+
       delayBlockFrom: 0,
       delayBlockTo: 0,
       start: "immediate",
@@ -287,7 +290,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
 
     const MAX_SIZE = 10 * 1024 * 1024; // Corrected to MB
     const oversizedFiles = files.filter(file => file.size > MAX_SIZE);
-    
+
     if (oversizedFiles.length > 0) {
       toast.error(`Alguns arquivos ultrapassam o tamanho máximo de 10MB: ${oversizedFiles.map(f => f.name).join(', ')}`);
       return;
@@ -296,7 +299,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
     // Create a deep copy of messages to avoid direct state mutation
     const newMessages = messages.map(step => [...step]);
     if (!newMessages[step]) newMessages[step] = [];
-    
+
     const tagMap = {
       image: 'imagem',
       video: 'video',
@@ -305,10 +308,10 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
     };
 
     const tagName = tagMap[type];
-    
+
     // Ensure the step exists and is an array
     newMessages[step] = Array.isArray(newMessages[step]) ? newMessages[step] : [];
-    
+
     // Find or create text message
     let textMessage = newMessages[step].find(m => m && m.type === 'text');
     if (!textMessage) {
@@ -323,22 +326,22 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
         const formDataToSend = new FormData();
         formDataToSend.append("file", file);
         const fileUrl = await sendFile(formDataToSend);
-        
+
         if (!fileUrl) {
           throw new Error('Falha ao enviar arquivo para o servidor');
         }
 
         const previewUrl = URL.createObjectURL(file);
-        
+
         // Always create a new content object
-        const content = { 
-          type, 
-          msg: file.name, 
+        const content = {
+          type,
+          msg: file.name,
           mimetype: file.type,
           previewUrl,
-          fileUrl 
+          fileUrl
         };
-        
+
         // For images, allow multiple: append; for others, replace existing of same type
         if (type === 'image') {
           newMessages[step] = [...newMessages[step], content];
@@ -399,9 +402,9 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
           occurrence++;
           return match;
         })
-        .replace(/\s{2,}/g, ' ')
-        .replace(/(\s*\{\{quebra\}\}\s*){2,}/g, '{{quebra}}')
-        .trim();
+          .replace(/\s{2,}/g, ' ')
+          .replace(/(\s*\{\{quebra\}\}\s*){2,}/g, '{{quebra}}')
+          .trim();
       }
     }
 
@@ -438,7 +441,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
       const varToInsert = variable === 'undefined' ? 'quebra' : variable;
       const newText = text.substring(0, start) + `{{${varToInsert}}}` + text.substring(end);
       textarea.value = newText;
-      
+
       const newMessages = [...messages];
       let textContent = newMessages[currentStep].find(m => m.type === 'text');
       if (textContent) {
@@ -499,7 +502,10 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
       config: {
         delayFrom: formData.config.delayFrom,
         delayTo: formData.config.delayTo,
-        delayBlock: formData.config.delayBlock,
+
+        blockFrom: formData.config.blockFrom,
+        blockTo: formData.config.blockTo,
+
         delayBlockFrom: formData.config.delayBlockFrom,
         delayBlockTo: formData.config.delayBlockTo,
         start: formData.config.start,
@@ -547,7 +553,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
     // Normalize media items so they always render with media bubble and caption from alt
     return processedStep.map((item) => {
       if (!item || typeof item !== 'object') return item;
-      if (["image","video","audio","document"].includes(item.type)) {
+      if (["image", "video", "audio", "document"].includes(item.type)) {
         const fileUrl = item.fileUrl || item.previewUrl || item.base64 || "";
         const caption = item.caption || item.msg || "";
         return { ...item, fileUrl, caption };
@@ -588,7 +594,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
         setFormData(prev => ({ ...prev, config: { ...prev.config, startTime: '00:00', endTime: '00:00' } }));
       }
     }
-    
+
     const data = buildShotData();
     onSave(data);
   };
@@ -705,7 +711,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                 <Select
                   onValueChange={(value) => {
                     setSelectedContactList(value);
-                    setFormData({...formData, contactListId: value});
+                    setFormData({ ...formData, contactListId: value });
                   }}
                 >
                   <SelectTrigger>
@@ -739,7 +745,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                       const newSelections = currentSelections.includes(value)
                         ? currentSelections.filter(v => v !== value)
                         : [...currentSelections, value];
-                      
+
                       return {
                         ...prev,
                         connectionsSelect: newSelections
@@ -750,7 +756,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione as conexões">
-                      {formData.connectionsSelect?.length > 0 
+                      {formData.connectionsSelect?.length > 0
                         ? `${formData.connectionsSelect.length} selecionada(s)`
                         : "Selecione as conexões"}
                     </SelectValue>
@@ -759,8 +765,8 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                     {connections
                       .filter(conn => conn.status === 'open' && conn.heater === false)
                       .map(conn => (
-                        <SelectItem 
-                          key={conn.instanceName} 
+                        <SelectItem
+                          key={conn.instanceName}
                           value={conn.instanceName}
                           checked={formData.connectionsSelect?.includes(conn.instanceName)}
                         >
@@ -835,9 +841,9 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                         >
                           Prévia
                         </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
+                        <Button
+                          variant="ghost"
+                          size="icon"
                           onClick={() => {
                             if (messages.length > 1) {
                               setMessages(messages.filter((_, i) => i !== stepIndex));
@@ -879,7 +885,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                                 const varName = typeof variable === 'string' ? variable : (variable.variable || 'quebra');
                                 const varKey = typeof variable === 'string' ? `var-${index}` : variable._id;
                                 return (
-                                  <Button 
+                                  <Button
                                     key={varKey}
                                     variant="outline"
                                     type="button"
@@ -899,11 +905,11 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                         <Label className="text-sm font-medium">Anexos</Label>
                         <div className="flex gap-2 mt-1">
                           {['image', 'video', 'document', 'audio'].map(type => (
-                            <Button 
+                            <Button
                               key={type}
                               variant="outline"
                               type="button"
-                              size="sm" 
+                              size="sm"
                               onClick={() => {
                                 const input = fileInputRef.current[type];
                                 if (input) {
@@ -927,19 +933,19 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                         {messages[stepIndex].filter(content => content.type !== 'text').map((content, contentIndex) => (
                           <div key={contentIndex} className="relative border rounded p-2">
                             {content.type === 'image' && (
-                              <img 
-                                src={content.previewUrl || content.fileUrl} 
-                                alt="Imagem" 
+                              <img
+                                src={content.previewUrl || content.fileUrl}
+                                alt="Imagem"
                                 className="h-20 w-full object-contain"
                               />
                             )}
                             {content.type === 'video' && (
-                              <video 
-                                src={content.previewUrl || content.fileUrl} 
+                              <video
+                                src={content.previewUrl || content.fileUrl}
                                 className="h-20 w-full"
                                 controls
                               />
-                            )}  
+                            )}
                             {content.type === 'document' && (
                               <div className="flex items-center gap-2">
                                 <FileIcon className="h-4 w-4 text-amber-500" />
@@ -952,17 +958,17 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                                   <FileAudio className="h-4 w-4 text-green-500" />
                                   <span className="text-sm">Áudio</span>
                                 </div>
-                                <audio 
-                                  src={content.previewUrl || content.fileUrl} 
-                                  controls 
+                                <audio
+                                  src={content.previewUrl || content.fileUrl}
+                                  controls
                                   className="w-full mt-1"
                                 />
                               </div>
                             )}
-                            <Button 
-                              variant="ghost" 
+                            <Button
+                              variant="ghost"
                               type="button"
-                              size="icon" 
+                              size="icon"
                               className="absolute top-0 right-0 h-6 w-6"
                               onClick={() => removeContent(stepIndex, contentIndex + 1)} // Adjust index for text
                             >
@@ -1041,163 +1047,172 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                     <div className="grid grid-cols-2 gap-3">
                       <div>
                         <Label className="text-xs text-gray-600 font-medium">Mínimo (segundos)</Label>
-                        <Input 
-                          type="number" 
+                        <Input
+                          type="number"
                           min="1"
-                          value={formData.config.delayFrom} 
-                          onChange={e => setFormData({ ...formData, config: { ...formData.config, delayFrom: parseInt(e.target.value) || 1 }})} 
+                          value={formData.config.delayFrom}
+                          onChange={e => setFormData({ ...formData, config: { ...formData.config, delayFrom: parseInt(e.target.value) || 1 } })}
                           className="mt-1 h-9"
                         />
                       </div>
                       <div>
                         <Label className="text-xs text-gray-600 font-medium">Máximo (segundos)</Label>
-                        <Input 
-                          type="number" 
+                        <Input
+                          type="number"
                           min="1"
-                          value={formData.config.delayTo} 
-                          onChange={e => setFormData({ ...formData, config: { ...formData.config, delayTo: parseInt(e.target.value) || 1 }})} 
+                          value={formData.config.delayTo}
+                          onChange={e => setFormData({ ...formData, config: { ...formData.config, delayTo: parseInt(e.target.value) || 1 } })}
                           className="mt-1 h-9"
                         />
                       </div>
                     </div>
                   </div>
-                  
+
                   {/* Duração do bloco - Only for scheduled */}
                   {formData.config.start === 'scheduled' && (
-                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-lg border border-purple-200">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-1 bg-purple-100 rounded">
-                        <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-4 rounded-lg border border-purple-200">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="p-1 bg-purple-100 rounded">
+                          <svg className="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <Label className="text-sm font-semibold text-gray-700">Quantidade por bloco</Label>
                       </div>
-                      <Label className="text-sm font-semibold text-gray-700">Quantidade por bloco</Label>
+                      <p className="text-xs text-gray-600 mb-3">Quantidade de envios por bloco</p>
+                       <div>
+                          <Label className="text-xs text-gray-600 font-medium">De (Bloco)</Label>
+                          <Input
+                            type="number"
+                            min="0"
+                            value={formData.config.delayFrom}
+                            onChange={e => setFormData({ ...formData, config: { ...formData.config, delayFrom: parseInt(e.target.value) || 0 } })}
+                            className="mt-1 h-9"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs text-gray-600 font-medium">Até (Bloco)</Label>
+                          <Input
+                            type="number"
+                            min="0"
+                            value={formData.config.delayTo}
+                            onChange={e => setFormData({ ...formData, config: { ...formData.config, delayTo: parseInt(e.target.value) || 0 } })}
+                            className="mt-1 h-9"
+                          />
+                        </div>
                     </div>
-                    <p className="text-xs text-gray-600 mb-3">Quantidade de envios por bloco</p>
-                    <div>
-                      <Label className="text-xs text-gray-600 font-medium">Quantidade por bloco</Label>
-                      <Input 
-                        type="number" 
-                        min="1"
-                        value={formData.config.delayBlock} 
-                        onChange={e => setFormData({ ...formData, config: { ...formData.config, delayBlock: parseInt(e.target.value) || 15 }})} 
-                        className="mt-1 h-9"
-                      />
-                    </div>
-                  </div>
                   )}
 
                   {/* Pausa entre blocos - Only for scheduled */}
                   {formData.config.start === 'scheduled' && (
-                  <div className="bg-gradient-to-br from-red-50 to-rose-50 p-4 rounded-lg border border-red-200">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-1 bg-red-100 rounded">
-                        <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                    <div className="bg-gradient-to-br from-red-50 to-rose-50 p-4 rounded-lg border border-red-200">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="p-1 bg-red-100 rounded">
+                          <svg className="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 9v6m4-6v6m7-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <Label className="text-sm font-semibold text-gray-700">Pausa entre blocos</Label>
                       </div>
-                      <Label className="text-sm font-semibold text-gray-700">Pausa entre blocos</Label>
+                      <p className="text-xs text-gray-600 mb-3">Tempo de espera após cada bloco de envio</p>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label className="text-xs text-gray-600 font-medium">De (minutos)</Label>
+                          <Input
+                            type="number"
+                            min="0"
+                            value={formData.config.delayBlockFrom}
+                            onChange={e => setFormData({ ...formData, config: { ...formData.config, delayBlockFrom: parseInt(e.target.value) || 0 } })}
+                            className="mt-1 h-9"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs text-gray-600 font-medium">Até (minutos)</Label>
+                          <Input
+                            type="number"
+                            min="0"
+                            value={formData.config.delayBlockTo}
+                            onChange={e => setFormData({ ...formData, config: { ...formData.config, delayBlockTo: parseInt(e.target.value) || 0 } })}
+                            className="mt-1 h-9"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-xs text-gray-600 mb-3">Tempo de espera após cada bloco de envio</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label className="text-xs text-gray-600 font-medium">De (minutos)</Label>
-                        <Input 
-                          type="number" 
-                          min="0"
-                          value={formData.config.delayBlockFrom} 
-                          onChange={e => setFormData({ ...formData, config: { ...formData.config, delayBlockFrom: parseInt(e.target.value) || 0 }})} 
-                          className="mt-1 h-9"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-xs text-gray-600 font-medium">Até (minutos)</Label>
-                        <Input 
-                          type="number" 
-                          min="0"
-                          value={formData.config.delayBlockTo} 
-                          onChange={e => setFormData({ ...formData, config: { ...formData.config, delayBlockTo: parseInt(e.target.value) || 0 }})} 
-                          className="mt-1 h-9"
-                        />
-                      </div>
-                    </div>
-                  </div>
                   )}
                 </div>
 
                 {/* Coluna Direita - Horários e Dias - Only for scheduled */}
                 {formData.config.start === 'scheduled' && (
-                <div className="space-y-6">
-                  {/* Horário de envio */}
-                  <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-4 rounded-lg border border-amber-200">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-1 bg-amber-100 rounded">
-                        <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                  <div className="space-y-6">
+                    {/* Horário de envio */}
+                    <div className="bg-gradient-to-br from-amber-50 to-yellow-50 p-4 rounded-lg border border-amber-200">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="p-1 bg-amber-100 rounded">
+                          <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                          </svg>
+                        </div>
+                        <Label className="text-sm font-semibold text-gray-700">Horário de envio</Label>
                       </div>
-                      <Label className="text-sm font-semibold text-gray-700">Horário de envio</Label>
+                      <p className="text-xs text-gray-600 mb-3">Período do dia para envio das mensagens</p>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <Label className="text-xs text-gray-600 font-medium">Início</Label>
+                          <Input
+                            type="time"
+                            value={formData.config.startTime}
+                            onChange={e => setFormData({ ...formData, config: { ...formData.config, startTime: e.target.value } })}
+                            disabled={formData.config.start === 'immediate'}
+                            className="mt-1 h-9"
+                          />
+                        </div>
+                        <div>
+                          <Label className="text-xs text-gray-600 font-medium">Término</Label>
+                          <Input
+                            type="time"
+                            value={formData.config.endTime}
+                            onChange={e => setFormData({ ...formData, config: { ...formData.config, endTime: e.target.value } })}
+                            disabled={formData.config.start === 'immediate'}
+                            className="mt-1 h-9"
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <p className="text-xs text-gray-600 mb-3">Período do dia para envio das mensagens</p>
-                    <div className="grid grid-cols-2 gap-3">
-                      <div>
-                        <Label className="text-xs text-gray-600 font-medium">Início</Label>
-                        <Input 
-                          type="time" 
-                          value={formData.config.startTime} 
-                          onChange={e => setFormData({ ...formData, config: {...formData.config, startTime: e.target.value}})} 
-                          disabled={formData.config.start === 'immediate'}
-                          className="mt-1 h-9"
-                        />
-                      </div>
-                      <div>
-                        <Label className="text-xs text-gray-600 font-medium">Término</Label>
-                        <Input 
-                          type="time" 
-                          value={formData.config.endTime} 
-                          onChange={e => setFormData({ ...formData, config: {...formData.config, endTime: e.target.value}})} 
-                          disabled={formData.config.start === 'immediate'}
-                          className="mt-1 h-9"
-                        />
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Dias da Semana */}
-                  <div className="bg-gradient-to-br from-teal-50 to-cyan-50 p-4 rounded-lg border border-teal-200">
-                    <div className="flex items-center gap-2 mb-3">
-                      <div className="p-1 bg-teal-100 rounded">
-                        <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                    {/* Dias da Semana */}
+                    <div className="bg-gradient-to-br from-teal-50 to-cyan-50 p-4 rounded-lg border border-teal-200">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="p-1 bg-teal-100 rounded">
+                          <svg className="w-4 h-4 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        </div>
+                        <Label className="text-sm font-semibold text-gray-700">Dias da Semana</Label>
                       </div>
-                      <Label className="text-sm font-semibold text-gray-700">Dias da Semana</Label>
-                    </div>
-                    <p className="text-xs text-gray-600 mb-3">Selecione os dias para envio</p>
-                    <div className="grid grid-cols-7 gap-2">
-                      {days.map(day => (
-                        <Button
-                          key={day.id}
-                          type="button"
-                          variant={formData.config.period.includes(day.id) ? "default" : "outline"}
-                          className={`w-full p-0 h-10 text-xs font-medium transition-all duration-200 ${
-                            formData.config.period.includes(day.id) 
-                              ? "bg-teal-600 hover:bg-teal-700 text-white shadow-md" 
+                      <p className="text-xs text-gray-600 mb-3">Selecione os dias para envio</p>
+                      <div className="grid grid-cols-7 gap-2">
+                        {days.map(day => (
+                          <Button
+                            key={day.id}
+                            type="button"
+                            variant={formData.config.period.includes(day.id) ? "default" : "outline"}
+                            className={`w-full p-0 h-10 text-xs font-medium transition-all duration-200 ${formData.config.period.includes(day.id)
+                              ? "bg-teal-600 hover:bg-teal-700 text-white shadow-md"
                               : "hover:bg-teal-50 hover:border-teal-300"
-                          }`}
-                          onClick={() => {
-                            const newPeriod = formData.config.period.includes(day.id)
-                              ? formData.config.period.filter(d => d !== day.id)
-                              : [...formData.config.period, day.id];
-                            setFormData({ ...formData, config: {...formData.config, period: newPeriod}});
-                          }}
-                        >
-                          {day.label}
-                        </Button>
-                      ))}
+                              }`}
+                            onClick={() => {
+                              const newPeriod = formData.config.period.includes(day.id)
+                                ? formData.config.period.filter(d => d !== day.id)
+                                : [...formData.config.period, day.id];
+                              setFormData({ ...formData, config: { ...formData.config, period: newPeriod } });
+                            }}
+                          >
+                            {day.label}
+                          </Button>
+                        ))}
+                      </div>
                     </div>
                   </div>
-                </div>
                 )}
               </div>
             </CardContent>

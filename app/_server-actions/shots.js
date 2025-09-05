@@ -10,7 +10,7 @@ export async function getShots() {
   try {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
-    const response = await Axios.get("http://94.72.125.153:8443/listShots", {
+    const response = await Axios.get("https://pro.libanoinstituto.com.br//listShots", {
       headers: {
         "Key": userCookie?.value,
       },
@@ -29,7 +29,7 @@ export async function sendFile(file) {
   try {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
-    const response = await Axios.post("http://94.72.125.153:8443/sendDoc", file, {
+    const response = await Axios.post("https://pro.libanoinstituto.com.br//sendDoc", file, {
       headers: {
         "Key": userCookie?.value
       }
@@ -55,7 +55,11 @@ export async function createShot(shotData) {
       config: {
         delayFrom: shotData.config.delayFrom || 1,
         delayTo: shotData.config.delayTo || 5,
-        delayBlock: shotData.config.delayBlock || 15, 
+
+        blockFrom: shotData.config.delayBlock || 15, 
+        blockTo: shotData.config.delayBlock || 30, 
+
+
         delayBlockFrom: parseInt(shotData.config.delayBlockFrom) || 0, 
         delayBlockTo: parseInt(shotData.config.delayBlockTo) || 0, 
         start: shotData.config.start || "immediate",
@@ -68,7 +72,7 @@ export async function createShot(shotData) {
     console.log("[Server-Action] Criando disparo com payload:", JSON.stringify(payload, null, 2));
 
     const response = await Axios.post(
-      "http://94.72.125.153:8443/shots",
+      "https://pro.libanoinstituto.com.br//shots",
       payload,
       {
         headers: {
@@ -116,7 +120,7 @@ export async function updateShot(shotId, shotData) {
     console.log("[Server-Action] Atualizando disparo com payload:", JSON.stringify(payload, null, 2));
 
     const response = await Axios.put(
-      `http://94.72.125.153:8443/shots/${shotId}`,
+      `https://pro.libanoinstituto.com.br//shots/${shotId}`,
       payload,
       {
         headers: {
@@ -147,7 +151,7 @@ export async function actionShot(shotId, action) {
     const userCookie = cookieStore.get("user");
     
     const response = await Axios.post(
-      `http://94.72.125.153:8443/shooting/${shotId}/${action}`,
+      `https://pro.libanoinstituto.com.br//shooting/${shotId}/${action}`,
       {},
       {
         headers: {

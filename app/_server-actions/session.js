@@ -8,7 +8,7 @@ export async function getSession() {
     try {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const users = await Axios.get("http://94.72.125.153:8443/users", {
+        const users = await Axios.get("https://pro.libanoinstituto.com.br//users", {
             headers: {
                 "Key": userCookie?.value,
             },
