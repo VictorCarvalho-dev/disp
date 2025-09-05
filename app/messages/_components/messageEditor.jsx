@@ -676,8 +676,8 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                 variant="outline"
               >
                 Testar
-              </Button>
-              <Button */}
+              </Button> */}
+              <Button
                 type="button"
                 onClick={onCancel}
                 disabled={isLoading}
