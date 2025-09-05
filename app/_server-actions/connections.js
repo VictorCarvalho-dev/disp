@@ -9,7 +9,7 @@ export async function getConnections() {
         console.log("[Server-Action] Carregando Conexões")
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const connections = await Axios.get("https://pro.libanoinstituto.com.br//listConnections/all", {
+        const connections = await Axios.get("https://sand.libanoinstituto.com.br/listConnections/all", {
             headers: {
                 "Key": userCookie?.value
             },
@@ -26,7 +26,7 @@ export async function getActiveConnections() {
         console.log("[Server-Action] Carregando Conexões")
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const connections = await Axios.get("https://pro.libanoinstituto.com.br//listConnections/active", {
+        const connections = await Axios.get("https://sand.libanoinstituto.com.br/listConnections/active", {
             headers: {
                 "Key": userCookie?.value
             },
@@ -43,7 +43,7 @@ export async function getHeaterConnections() {
         console.log("[Server-Action] Carregando Conexões")
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const connections = await Axios.get("https://pro.libanoinstituto.com.br//listConnections/heater", {
+        const connections = await Axios.get("https://sand.libanoinstituto.com.br/listConnections/heater", {
             headers: {
                 "Key": userCookie?.value
             },
@@ -60,7 +60,7 @@ export async function createConnection(values) {
     try {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const connections = await Axios.post("https://pro.libanoinstituto.com.br//createConnection", {
+        const connections = await Axios.post("https://sand.libanoinstituto.com.br/createConnection", {
             instanceName: values.name,
             heater: values.newNumber,
         }, {
@@ -84,7 +84,7 @@ export async function deleteConnection(id) {
     try {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const connections = await Axios.delete(`https://pro.libanoinstituto.com.br//deleteConnection/${id}`, {
+        const connections = await Axios.delete(`https://sand.libanoinstituto.com.br/deleteConnection/${id}`, {
             headers: {
                 "Key": userCookie?.value
             }
@@ -105,7 +105,7 @@ export async function statusConnection(id) {
     try {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const connections = await Axios.get(`https://pro.libanoinstituto.com.br//checkConnection/${id}`, {
+        const connections = await Axios.get(`https://sand.libanoinstituto.com.br/checkConnection/${id}`, {
             headers: {
                 "Key": userCookie?.value
             }
@@ -126,7 +126,7 @@ export async function updateConnection(id, data) {
     try {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const connection = await Axios.put(`https://pro.libanoinstituto.com.br//updateHeater/${id}`, {
+        const connection = await Axios.put(`https://sand.libanoinstituto.com.br/updateHeater/${id}`, {
             heater: data,
         }, {
             headers: {
@@ -149,7 +149,7 @@ export async function generateQrCode(id) {
     try {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
-        const connections = await Axios.get(`https://pro.libanoinstituto.com.br//qrcodeConnection/${id}`, {
+        const connections = await Axios.get(`https://sand.libanoinstituto.com.br/qrcodeConnection/${id}`, {
             headers: {
                 "Key": userCookie?.value
             }
@@ -168,7 +168,7 @@ export async function disconnectConnection(id) {
         const cookieStore = await cookies();
         const userCookie = cookieStore.get("user");
         const response = await Axios.put(
-            `https://pro.libanoinstituto.com.br//disconnectConnection/${id}`,
+            `https://sand.libanoinstituto.com.br/disconnectConnection/${id}`,
             {}, // corpo vazio se não for necessário
             { // headers como terceiro parâmetro
                 headers: {

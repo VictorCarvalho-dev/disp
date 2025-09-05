@@ -10,7 +10,7 @@ export async function getShots() {
   try {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
-    const response = await Axios.get("https://pro.libanoinstituto.com.br//listShots", {
+    const response = await Axios.get("https://sand.libanoinstituto.com.br/listShots", {
       headers: {
         "Key": userCookie?.value,
       },
@@ -29,7 +29,7 @@ export async function sendFile(file) {
   try {
     const cookieStore = await cookies();
     const userCookie = cookieStore.get("user");
-    const response = await Axios.post("https://pro.libanoinstituto.com.br//sendDoc", file, {
+    const response = await Axios.post("https://sand.libanoinstituto.com.br/sendDoc", file, {
       headers: {
         "Key": userCookie?.value
       }
@@ -72,7 +72,7 @@ export async function createShot(shotData) {
     console.log("[Server-Action] Criando disparo com payload:", JSON.stringify(payload, null, 2));
 
     const response = await Axios.post(
-      "https://pro.libanoinstituto.com.br//shots",
+      "https://sand.libanoinstituto.com.br/shots",
       payload,
       {
         headers: {
@@ -120,7 +120,7 @@ export async function updateShot(shotId, shotData) {
     console.log("[Server-Action] Atualizando disparo com payload:", JSON.stringify(payload, null, 2));
 
     const response = await Axios.put(
-      `https://pro.libanoinstituto.com.br//shots/${shotId}`,
+      `https://sand.libanoinstituto.com.br/shots/${shotId}`,
       payload,
       {
         headers: {
@@ -151,7 +151,7 @@ export async function actionShot(shotId, action) {
     const userCookie = cookieStore.get("user");
     
     const response = await Axios.post(
-      `https://pro.libanoinstituto.com.br//shooting/${shotId}/${action}`,
+      `https://sand.libanoinstituto.com.br/shooting/${shotId}/${action}`,
       {},
       {
         headers: {
