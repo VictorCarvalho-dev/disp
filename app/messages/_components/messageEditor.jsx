@@ -1080,6 +1080,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                         <Label className="text-sm font-semibold text-gray-700">Quantidade por bloco</Label>
                       </div>
                       <p className="text-xs text-gray-600 mb-3">Quantidade de envios por bloco</p>
+                      <div className="grid grid-cols-2 gap-3">
                        <div>
                           <Label className="text-xs text-gray-600 font-medium">De (Bloco)</Label>
                           <Input
@@ -1099,6 +1100,7 @@ export function MessageEditor({ onSave, onCancel, connections = [], contacts = [
                             onChange={e => setFormData({ ...formData, config: { ...formData.config, delayTo: parseInt(e.target.value) || 0 } })}
                             className="mt-1 h-9"
                           />
+                        </div>
                         </div>
                     </div>
                   )}
